@@ -1,38 +1,14 @@
 import styles from "./page.module.css";
-// import styled from "styled-components";
-
-// const Wrapper = styled.div`
-//   position: sticky;
-//   top: 0;
-//   z-index: 100;
-//   background-color: black;
-// `;
-
-// const Header = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   margin: 0 auto;
-//   max-width: 1028px;
-//   height: 5rem;
-//   color: white;
-// `;
-// const Logo = styled.div`
-//   margin-left: 1rem;
-// `;
+import Header from "./homecomponent/Header";
+import Exploration from "./homecomponent/Exploration";
 
 export default function Home() {
   return (
     <>
-      {/* <Wrapper>
-        <Header>
-          <div>Logo</div>
-          <div style={{ display: "flex" }}>
-            <div>asdf</div>
-            <div>asdf</div>
-          </div>
-        </Header>
-      </Wrapper> */}
+      <div className={styles.bg}>
+        <Header />
+        <Exploration />
+      </div>
     </>
   );
 }
