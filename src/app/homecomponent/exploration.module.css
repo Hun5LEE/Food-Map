@@ -1,0 +1,35 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+.inputField {
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  width: 17rem;
+  height: 2rem;
+  border: none;
+  border-bottom: 2px solid white;
+  background: none;
+}
+
+.inputField:focus {
+  outline: none;
+  border-bottom: 2px solid white;
+}
+
+.inputField::placeholder {
+  color: white;
+  text-align: start;
+}
+
+.searchBtn {
+  background: none;
+  border: none;
+  z-index: 1;
+  margin-left: -1.6rem;
+  transform: translateY(-3px);
+}

@@ -1,6 +1,7 @@
 import styles from "./page.module.css";
 import Header from "./homecomponent/Header";
 import Exploration from "./homecomponent/Exploration";
+import Category from "./homecomponent/Category";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <div className={styles.bg}>
         <Header />
         <Exploration />
+        <Category />
       </div>
     </>
   );

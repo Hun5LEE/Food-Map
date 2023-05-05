@@ -1,0 +1,16 @@
+.wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin-bottom: 5rem;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1028px;
+  height: 5rem;
+  color: white;
+}
