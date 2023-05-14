@@ -1,69 +1,86 @@
 "use client";
 
-import { useMemo, useState, useEffect, useCallback } from "react";
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { useState, useEffect } from "react";
 import GoogleMapReact from "google-map-react";
+import {
+  GoogleMap,
+  Marker,
+  useLoadScript,
+  InfoWindow,
+} from "@react-google-maps/api";
 
 export default function MapChart() {
-  const center = { lat: 37.5665, lng: 126.978 };
+  const [places, setPlaces] = useState<any>([]);
+  const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    libraries: ["places"],
   });
-  const [map, setMap] = useState<any>(null);
-  const [placesService, setPlacesService] = useState<any>(null);
-  const [infoWindow, setInfoWindow] = useState<any>(null);
 
   useEffect(() => {
-    if (!isLoaded || !map) return;
-    const placesService = new window.google.maps.places.PlacesService(map);
-    setPlacesService(placesService);
-  }, [isLoaded, map]);
+    if (!isLoaded || loadError) return;
 
-  const handleMarkerClick = useCallback(
-    (marker: google.maps.Marker) => {
-      if (!placesService) return;
+    const map = new google.maps.Map(document.createElement("div"));
+    const service = new google.maps.places.PlacesService(map);
 
-      placesService.nearbySearch(
-        {
-          location: marker.getPosition(),
-          radius: 500,
-          type: ["restaurant"],
-        },
-        (
-          results: google.maps.places.PlaceResult[],
-          status: google.maps.places.PlacesServiceStatus
-        ) => {
-          if (status !== "OK") return;
-
-          const place = results[0];
-
-          if (!infoWindow) {
-            const infoWindow = new window.google.maps.InfoWindow({
-              content: `<div><h3>${place.name}</h3><p>${place.vicinity}</p></div>`,
-            });
-
-            setInfoWindow(infoWindow);
-          }
-
-          infoWindow.open(map, marker);
+    service.nearbySearch(
+      {
+        location: { lat: 37.5914038, lng: 127.2168206 },
+        radius: 1000,
+        type: "restaurant",
+      },
+      (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          setPlaces(results);
         }
-      );
-    },
-    [placesService, infoWindow, map]
-  );
+      }
+    );
+  }, [isLoaded, loadError]);
 
-  if (loadError) return <div>Error</div>;
+  if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loding...</div>;
+  console.log(places);
 
   return (
     <GoogleMap
       zoom={10}
-      center={center}
+      center={{ lat: 37.5914038, lng: 127.2168206 }}
       mapContainerClassName="map-container"
-      onLoad={(map) => setMap(map)}
-      onUnmount={() => setMap(null)}
     >
-      <Marker position={center} onClick={(e: any) => handleMarkerClick(e)} />
+      {places.map((place: any) => (
+        <Marker
+          key={place.place_id}
+          position={{
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          }}
+          icon={{
+            url: "/home_bg.jpg",
+            scaledSize: new window.google.maps.Size(50, 50),
+          }}
+          onClick={() => setSelectedPlace(place)}
+        />
+      ))}
+      {selectedPlace && (
+        <InfoWindow
+          position={{
+            lat: selectedPlace.geometry.location.lat(),
+            lng: selectedPlace.geometry.location.lng(),
+          }}
+          onCloseClick={() => setSelectedPlace(null)}
+        >
+          <div>
+            <h2>{selectedPlace.name}</h2>
+            <img
+              src={selectedPlace.photos?.[0].getUrl()}
+              width={50}
+              height={50}
+            />
+            <p>{selectedPlace.vicinity}</p>
+            <p>{selectedPlace.rating}</p>
+          </div>
+        </InfoWindow>
+      )}
       {/* <Marker position={{ lat: 37.5519, lng: 126.9918 }}></Marker> */}
     </GoogleMap>
   );

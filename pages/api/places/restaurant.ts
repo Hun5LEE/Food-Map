@@ -21,7 +21,7 @@ export default async function handler(req: any, res: any) {
       const {
         data: { data },
       } = await axios.get(URL, options);
-      return res.status(200).json(data);
+      return res.status(200).json("성공");
     }
   } catch (err) {
     console.log(err);
