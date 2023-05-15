@@ -26,7 +26,7 @@ export default function MapChart() {
     service.nearbySearch(
       {
         location: { lat: 37.5914038, lng: 127.2168206 },
-        radius: 1000,
+        radius: 500,
         type: "restaurant",
       },
       (results, status) => {
@@ -56,7 +56,7 @@ export default function MapChart() {
           }}
           icon={{
             url: "/home_bg.jpg",
-            scaledSize: new window.google.maps.Size(50, 50),
+            scaledSize: new window.google.maps.Size(75, 75),
           }}
           onClick={() => setSelectedPlace(place)}
         />
